@@ -5,5 +5,5 @@
 *.app
 *.exe
 *.war
-back
+back/back
 *.log
