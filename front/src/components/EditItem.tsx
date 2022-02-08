@@ -172,7 +172,7 @@ export default function EditItem({open, id, callback}:Props) {
             {/* Mock says 'Add Task' */}
             <Button variant='contained' disabled={submitting} onClick={submit}>Save Item</Button>
           </Stack>
-          <Box sx={{ height: '5px', backgroundColor:'#4D81B7'}}></Box>
+          <Box sx={{ height: '5px', backgroundColor: theme=>theme.palette.primary.light}}></Box>
         </>}
     </Drawer>
   );

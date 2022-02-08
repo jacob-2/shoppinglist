@@ -54,7 +54,11 @@ export default function Item(
 				/>
 			</ListItemIcon>
 			<ListItemText
-				primary={<Typography variant="h3" color={it.purchased ? '#4D81B7' : 'initial'} sx={{...lineThrough}}>{it.title}</Typography>}
+				primary={
+					<Typography variant="h3" sx={{...lineThrough}}
+						color={it.purchased ? (theme => theme.palette.primary.light) : 'initial'}
+					>{it.title}</Typography>
+				}
 				secondary={<Typography variant='subtitle2' sx={{...lineThrough}}>{it.description}</Typography>}
 			/>
 		</ListItemButton>
