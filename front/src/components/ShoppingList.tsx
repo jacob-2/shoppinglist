@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Item as ItemI } from "../api/items";
 import Spinner from './Spinner';
 import { ItemsAPI } from "../api/items";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, List, Stack, Typography } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, List, ListItem, ListItemText, Stack, Typography } from "@mui/material";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 
 import Item from './Item';
+import EditItem from "./EditItem";
+import NewItem from "./NewItem";
 
 
 export default function ShoppingList() {
@@ -15,12 +17,12 @@ export default function ShoppingList() {
   const [askDelete, setAskDelete] = useState<number|null>(null);
 
   const navigate = useNavigate();
+  const newDrawer = useMatch('new');
+  const editDrawer = useMatch('edit/:id');
 
   const setItem = (i: number) => (it: ItemI) => {
     setItems(its => {
       its = its.slice();
-      console.log(its[i]);
-      console.log(it);
       its[i] = it;
       return its;
     })
@@ -43,38 +45,56 @@ export default function ShoppingList() {
     ItemsAPI.list().then(result => {
       if("error" in result)
         setError(result.error);
-      else if('data' in result)
+      else
         setItems(result.data);
       setLoading(false);
     })
   },[]);
+
+  const editCallback = (it: ItemI) => {
+    setItems(its=>its.map(it2=>it2.id==it.id ? it : it2));
+  };
+
+  const loadMore = () => {
+    ItemsAPI.list(items[items.length-1].id+1, 20)
+      .then(res=>{
+        if('error' in res)
+          setError(res.error);
+        else
+          setItems(its => its.concat(res.data));
+      })
+  }; 
+
+  const deleteDialog = <Dialog
+      open={askDelete != null}
+      onClose={() => setAskDelete(null)}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title" sx={{
+        padding: '30px', paddingBottom: '10px', fontWeight: 600
+      }}>
+        Delete Item?
+      </DialogTitle>
+      <DialogContent sx={{ width: '410px', paddingX: '30px' }}>
+        <DialogContentText id="alert-dialog-description" variant='body2'>
+          Are you sure you want to delete this item? This can not be undone.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions sx={{ padding: '30px' }}>
+        <Button onClick={() => setAskDelete(null)}>Cancel</Button>
+        <Button variant='contained' onClick={confirmDelete}>Delete</Button>
+      </DialogActions>
+    </Dialog>;
   
-  return (
-    error ? <ErrorMessage error={error} /> :
-    loading || !items ? <Spinner /> :
-    !items.length ? <EmptyList /> : 
-    <>
-      <Dialog
-        open={askDelete != null}
-        onClose={()=>setAskDelete(null)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title" sx={{
-          padding:'30px', paddingBottom:'10px', fontWeight:600
-        }}>
-            Delete Item?
-        </DialogTitle>
-        <DialogContent sx={{ width: '410px', paddingX: '30px' }}>
-          <DialogContentText id="alert-dialog-description" variant='body2'>
-            Are you sure you want to delete this item? This can not be undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{ padding: '30px'}}>
-          <Button onClick={()=>setAskDelete(null)}>Cancel</Button>
-          <Button variant='contained' onClick={confirmDelete}>Delete</Button>
-        </DialogActions>
-      </Dialog>
+  return <>
+    <NewItem open={!!newDrawer} callback={loadMore} />
+    <EditItem open={!!editDrawer} id={parseInt(editDrawer?.params?.id || '')} callback={editCallback} />
+    {deleteDialog}
+    { error ? <ErrorMessage error={error} />
+    : loading || !items ? <Spinner />
+    : !items.length ? <EmptyList />
+    : <>
       <Stack direction='row' sx={{ mt: '35px', justifyContent: 'space-between', alignItems:'end' }}>
         <Typography variant='h2'>Your Items</Typography>
         <Button variant='contained' onClick={()=>navigate('/new')}>Add Item</Button>
@@ -84,8 +104,10 @@ export default function ShoppingList() {
             <Item key={it.id} item={it} setItem={setItem(i)} deleteItem={askDeleteItem(i)} />)
         }
       </List>
-    </>
-  );
+      <Box textAlign={'center'}><Button onClick={loadMore}>Load more</Button></Box>
+      </>
+    }
+  </>;
 }
 
 function EmptyList() {

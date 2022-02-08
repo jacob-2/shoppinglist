@@ -7,8 +7,9 @@ import { ItemsAPI, NewItem as Item } from "../api/items";
 
 interface Props {
   open: boolean;
+  callback: ()=>void;
 }
-export default function NewItem({open}:Props) {
+export default function NewItem({open, callback}:Props) {
   const navigate = useNavigate();
 
   const [item, setItem] = useState<Item>({
@@ -37,9 +38,18 @@ export default function NewItem({open}:Props) {
     }
     return true;
   }
+
   useEffect(()=>{
     setInputErrors({});
   }, [item]);
+
+  useEffect(()=>{
+    if(!!error) {
+      // TODO: better error handling
+      alert(error);
+      window.location.reload();
+    }
+  }, [error]);
 
   const submit = ()=>{
     if (submitting) return;
@@ -51,6 +61,7 @@ export default function NewItem({open}:Props) {
       else {
         navigate('/');
         setHidden(true);
+        callback();
         clear();
       }
     })
@@ -61,7 +72,6 @@ export default function NewItem({open}:Props) {
       anchor='right'
       open={open}
       sx={{maxWidth:'90%', display: hidden && !open ? 'none':'initial'}}
-      // onClose={}
     >
       <Toolbar
         sx={{
@@ -99,9 +109,11 @@ export default function NewItem({open}:Props) {
         <TextField placeholder='Description' multiline rows={4}
           inputProps={{ maxLength: 100 }}
           InputProps={{
-            endAdornment: <InputAdornment position='end' sx={{ width: 0, ml: '-30px', alignSelf: 'flex-end' }}>
-              <Typography variant='caption'>{`${item.description.length}/100`}</Typography>
-            </InputAdornment>,
+            endAdornment: <InputAdornment position='end' sx={{alignSelf: 'flex-end', width: 0}}>
+                <Typography variant='caption' sx={{width:'60px', textAlign:'right', ml:'-60px'}}>
+                  {`${item.description.length}/100`}
+                </Typography>
+              </InputAdornment>,
           }}
           value={item.description}
           onChange={e=>
@@ -115,7 +127,7 @@ export default function NewItem({open}:Props) {
           freeSolo
           filterOptions={(o) => o}
           onChange={(e, newValue) =>
-            (v => setItem(it => ({ ...it, quatity: parseInt(v || '') || 0 })))
+            (v => setItem(it => ({ ...it, quantity: parseInt(v || '') || 0 })))
               (newValue)
           }
           value={(item.quantity||'').toString()}
@@ -124,7 +136,7 @@ export default function NewItem({open}:Props) {
             inputProps={{ ...params.inputProps, inputMode: 'numeric', pattern: '[0-9]*' }}
             placeholder="How many?" 
             onChange={(e) =>
-              (v => setItem(it => ({ ...it, quatity: parseInt(v || '') || 0 })))
+              (v => setItem(it => ({ ...it, quantity: parseInt(v || '') || 0 })))
                 (e.currentTarget.value)
             }
             value={(item.quantity||'').toString()}

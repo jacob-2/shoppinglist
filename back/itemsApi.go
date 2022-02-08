@@ -89,7 +89,36 @@ func list(w http.ResponseWriter, r *http.Request) {
 }
 
 func getItem(w http.ResponseWriter, r *http.Request) {
-	
+	id, ok := mux.Vars(r)["id"]
+	if !ok {
+		send400(w)
+		return
+	}
+
+	var it Item
+	var err error
+	it.ID, err = strconv.Atoi(id)
+	if err != nil {
+		send400(w)
+		return
+	}
+
+	row := db.QueryRow(
+		context.Background(),
+		`
+		select id, title, description, quantity, purchased
+		from items
+		where id = $1
+		`,
+		it.ID,
+	)
+	err = row.Scan(
+		&it.ID, &it.Title, &it.Description, &it.Quantity, &it.Purchased)
+	if err != nil {
+		send500(w, err)
+		return
+	}
+	send200(w, &Response{Data: it})
 }
 
 func newItem(w http.ResponseWriter, r *http.Request) {

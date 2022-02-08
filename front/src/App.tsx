@@ -6,6 +6,7 @@ import ShoppingList from './components/ShoppingList';
 import { AppBar, Box, Container, createTheme, getAlertTitleUtilityClass, ThemeProvider, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 
 import NewItem from './components/NewItem';
+import EditItem from './components/EditItem';
 
 export default function App() {
   return (
@@ -18,8 +19,6 @@ export default function App() {
 }
 
 function Layout() {
-  const newDrawer = useMatch('new');
-  const editDrawer = useMatch('edit/:id');
   return (
     <ThemeProvider theme={theme}>
       <ElevationScroll>
@@ -32,10 +31,7 @@ function Layout() {
       
       <Toolbar />
 
-      <NewItem open={!!newDrawer} />
-      {/* <EditItem open={!!editDrawer} item={editDrawer?.params.id} /> */}
-
-      <Box sx={{ my: 2, maxWidth:'1025px', mx: 'auto' }}>
+      <Box sx={{ my: 2, width:'1025px', maxWidth:'90%', mx: 'auto' }}>
         <ShoppingList />
       </Box>
 
