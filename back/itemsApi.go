@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/jackc/pgx/v4"
 )
 
 
@@ -114,6 +115,10 @@ func getItem(w http.ResponseWriter, r *http.Request) {
 	)
 	err = row.Scan(
 		&it.ID, &it.Title, &it.Description, &it.Quantity, &it.Purchased)
+	if err == pgx.ErrNoRows {
+		send404(w)
+		return
+	}
 	if err != nil {
 		send500(w, err)
 		return
