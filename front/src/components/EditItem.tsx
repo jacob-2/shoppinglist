@@ -148,7 +148,9 @@ export default function EditItem({open, id, callback}:Props) {
                 value={(item.quantity||'').toString()}
                 renderInput={(params) => <TextField sx={{appearance:'listbox'}}
                   {...params}
-                  inputProps={{ ...params.inputProps, inputMode: 'numeric', pattern: '[0-9]*' }}
+                  type='number'
+                  onKeyDown={e => e.key == 'Backspace' || e.key == 'Delete' ? true : !isNaN(Number(e.key))}
+                  inputProps={{ ...params.inputProps }}
                   placeholder="How many?" 
                   onChange={(e) =>
                     (v => setItemProperty({quantity: parseInt(v || '') || 0 }))
