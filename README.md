@@ -3,8 +3,9 @@
 # How to build and run
 
 ## Database setup
+* Set up a PostgreSQL database
 * Install [Goose](https://github.com/pressly/goose)
-* Set environment variables `GOOSE_DRIVER=postgres` and `GOOSE_DBSTRING=...` according to Goose docs (the server will also look for these)
+* Set environment variables `GOOSE_DRIVER=postgres` and `GOOSE_DBSTRING=...` according to Goose docs (the server will also use GOOSE_DBSTRING)
 * Run `cd back/migrations && goose up`
 
 ## Development
