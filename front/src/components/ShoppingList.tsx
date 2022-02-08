@@ -56,14 +56,14 @@ export default function ShoppingList() {
   };
 
   const loadMore = () => {
-    ItemsAPI.list(items[items.length-1].id+1, 20)
+    ItemsAPI.list(items.length ? items[items.length-1].id+1 : 1, 20)
       .then(res=>{
         if('error' in res)
           setError(res.error);
         else
           setItems(its => its.concat(res.data));
       })
-  }; 
+  };
 
   const deleteDialog = <Dialog
       open={askDelete != null}
