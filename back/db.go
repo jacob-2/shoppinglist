@@ -4,16 +4,16 @@ import (
 	"context"
 	"os"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-var db *pgx.Conn
+var db *pgxpool.Pool
 
 func initDB() (err error) {
-	db, err = pgx.Connect(context.Background(), os.Getenv("GOOSE_DBSTRING"))
+	db, err = pgxpool.Connect(context.Background(), os.Getenv("GOOSE_DBSTRING"))
 	return
 }
 
 func closeDB() {
-	db.Close(context.Background())
+	db.Close()
 }
