@@ -1,5 +1,5 @@
 
-const apiRoot = process.env.NODE_ENV == 'production' ?
+const apiRoot = process.env.NODE_ENV === 'production' ?
 	'/api/items' : 'http://localhost:3001/api/items';
 
 export const ItemsAPI = {

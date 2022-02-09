@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Item as ItemI } from "../api/items";
 import Spinner from './Spinner';
 import { ItemsAPI } from "../api/items";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, List, ListItem, ListItemText, Stack, Typography } from "@mui/material";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, List, Stack, Typography } from "@mui/material";
+import { useMatch, useNavigate } from "react-router-dom";
 
 import Item from './Item';
 import EditItem from "./EditItem";
@@ -52,7 +52,7 @@ export default function ShoppingList() {
   },[]);
 
   const editCallback = (it: ItemI) => {
-    setItems(its=>its.map(it2=>it2.id==it.id ? it : it2));
+    setItems(its=>its.map(it2=>it2.id===it.id ? it : it2));
   };
 
   const loadMore = () => {

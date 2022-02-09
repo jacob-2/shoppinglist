@@ -1,6 +1,5 @@
 import { Delete, Edit } from "@mui/icons-material";
 import { Checkbox, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
-import { fontStyle } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 
 import { Item as ItemI, ItemsAPI } from '../api/items';

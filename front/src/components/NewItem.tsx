@@ -1,5 +1,5 @@
 import { LastPage } from "@mui/icons-material";
-import { Autocomplete, Box, Button, Drawer, IconButton, InputAdornment, MenuItem, Select, Stack, TextField, Toolbar, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Drawer, IconButton, InputAdornment, Stack, TextField, Toolbar, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ItemsAPI, NewItem as Item } from "../api/items";
@@ -134,7 +134,7 @@ export default function NewItem({open, callback}:Props) {
           renderInput={(params) => <TextField sx={{appearance:'listbox'}}
             {...params}
             type='number'
-            onKeyDown={e=>e.key == 'Backspace' || e.key == 'Delete' ? true : !isNaN(Number(e.key))}
+            onKeyDown={e=>e.key === 'Backspace' || e.key === 'Delete' ? true : !isNaN(Number(e.key))}
             inputProps={{ ...params.inputProps }}
             placeholder="How many?" 
             onChange={(e) =>

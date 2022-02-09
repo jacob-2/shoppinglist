@@ -1,12 +1,10 @@
 import './App.scss';
 
 import React from 'react';
-import { Routes, Route, Outlet, Link, useMatch, useLocation } from "react-router-dom";
+import { Routes, Route, Outlet, Link } from "react-router-dom";
 import ShoppingList from './components/ShoppingList';
-import { AppBar, Box, Container, createTheme, getAlertTitleUtilityClass, ThemeProvider, Toolbar, Typography, useScrollTrigger } from '@mui/material';
+import { AppBar, Box, createTheme, ThemeProvider, Toolbar, Typography, useScrollTrigger } from '@mui/material';
 
-import NewItem from './components/NewItem';
-import EditItem from './components/EditItem';
 
 export default function App() {
   return (
@@ -159,15 +157,4 @@ declare module '@mui/material/styles' {
       danger?: string;
     };
   }
-}
-
-function PageNotFound() {
-  return (
-    <div>
-      <h2>Page not found!</h2>
-      <p>
-        <Link to="/">Go home</Link>
-      </p>
-    </div>
-  );
 }
