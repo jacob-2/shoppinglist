@@ -16,7 +16,7 @@
 * (Optional) Navigate to `http://localhost:3001/api/items/delete-all` as desired
 
 ## Production
-* Build the client: `cd front && npm i && npm build`
+* Build the client: `cd front && npm i && npm run build`
 * Build the server: `cd back && go build`
 * Run the server: `cd back && export SHOPPING_LIST_DEV=false; ./back`
 
